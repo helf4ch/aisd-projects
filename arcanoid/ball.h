@@ -13,8 +13,8 @@
 
 namespace Arcanoid {
     class Ball : public Object, public CircleForm, public Updatable, 
-                 public Destroyable, public Collidable<Paddle>, 
-                 public Collidable<Brick>, public Collidable<HitBox> {
+                 public Collidable<Paddle>, public Collidable<Brick>, 
+                 public Collidable<HitBox> {
         private:
             sf::Vector2f velocity{-BALL_VELOCITY, -BALL_VELOCITY};
 
