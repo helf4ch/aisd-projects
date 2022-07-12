@@ -1,0 +1,196 @@
+# depslib dependency file v1.0
+1657505128 source:/home/helf4ch/git/aisd-projects/arcanoid/main.cpp
+	"arcanoid.h"
+
+1657516909 /home/helf4ch/git/aisd-projects/arcanoid/arcanoid.h
+	<SFML/Graphics.hpp>
+	<vector>
+	<iostream>
+	<string>
+	"constants.h"
+	"gameEvent.h"
+	"ball.h"
+	"paddle.h"
+	"brick.h"
+	"HitBox.h"
+
+1657513643 /home/helf4ch/git/aisd-projects/arcanoid/constants.h
+	<SFML/Graphics.hpp>
+
+1657503065 /home/helf4ch/git/aisd-projects/arcanoid/gameEvent.h
+	<SFML/Graphics.hpp>
+
+1657517231 /home/helf4ch/git/aisd-projects/arcanoid/ball.h
+	<SFML/Graphics.hpp>
+	"constants.h"
+	"gameEvent.h"
+	"object.h"
+	"forms.h"
+	"properties.h"
+	"paddle.h"
+	"brick.h"
+	"HitBox.h"
+
+1657273150 /home/helf4ch/git/aisd-projects/arcanoid/object.h
+	<SFML/Graphics.hpp>
+
+1657513215 /home/helf4ch/git/aisd-projects/arcanoid/forms.h
+	<SFML/Graphics.hpp>
+
+1657502161 /home/helf4ch/git/aisd-projects/arcanoid/properties.h
+	<SFML/Graphics.hpp>
+	<vector>
+	"object.h"
+	"gameEvent.h"
+
+1657453533 /home/helf4ch/git/aisd-projects/arcanoid/paddle.h
+	<SFML/Graphics.hpp>
+	"constants.h"
+	"object.h"
+	"forms.h"
+	"properties.h"
+
+1657359431 /home/helf4ch/git/aisd-projects/arcanoid/brick.h
+	<SFML/Graphics.hpp>
+	"constants.h"
+	"object.h"
+	"forms.h"
+	"properties.h"
+
+1657516959 /home/helf4ch/git/aisd-projects/arcanoid/HitBox.h
+	<SFML/Graphics.hpp>
+	"constants.h"
+	"object.h"
+	"forms.h"
+	"properties.h"
+
+1657505128 source:/home/helf4ch/projects/arcanoid_codeblocks/main.cpp
+	"arcanoid.h"
+
+1657516909 /home/helf4ch/projects/arcanoid_codeblocks/arcanoid.h
+	<SFML/Graphics.hpp>
+	<vector>
+	<iostream>
+	<string>
+	"constants.h"
+	"gameEvent.h"
+	"ball.h"
+	"paddle.h"
+	"brick.h"
+	"HitBox.h"
+
+1657513643 /home/helf4ch/projects/arcanoid_codeblocks/constants.h
+	<SFML/Graphics.hpp>
+
+1657503065 /home/helf4ch/projects/arcanoid_codeblocks/gameEvent.h
+	<SFML/Graphics.hpp>
+
+1657517231 /home/helf4ch/projects/arcanoid_codeblocks/ball.h
+	<SFML/Graphics.hpp>
+	"constants.h"
+	"gameEvent.h"
+	"object.h"
+	"forms.h"
+	"properties.h"
+	"paddle.h"
+	"brick.h"
+	"HitBox.h"
+
+1657273150 /home/helf4ch/projects/arcanoid_codeblocks/object.h
+	<SFML/Graphics.hpp>
+
+1657513215 /home/helf4ch/projects/arcanoid_codeblocks/forms.h
+	<SFML/Graphics.hpp>
+
+1657502161 /home/helf4ch/projects/arcanoid_codeblocks/properties.h
+	<SFML/Graphics.hpp>
+	<vector>
+	"object.h"
+	"gameEvent.h"
+
+1657453533 /home/helf4ch/projects/arcanoid_codeblocks/paddle.h
+	<SFML/Graphics.hpp>
+	"constants.h"
+	"object.h"
+	"forms.h"
+	"properties.h"
+
+1657359431 /home/helf4ch/projects/arcanoid_codeblocks/brick.h
+	<SFML/Graphics.hpp>
+	"constants.h"
+	"object.h"
+	"forms.h"
+	"properties.h"
+
+1657516959 /home/helf4ch/projects/arcanoid_codeblocks/HitBox.h
+	<SFML/Graphics.hpp>
+	"constants.h"
+	"object.h"
+	"forms.h"
+	"properties.h"
+
+1657505128 source:/home/helf4ch/git/aisd-projects/arcanoid/arcanoid_codeblocks/main.cpp
+	"arcanoid.h"
+
+1657516909 /home/helf4ch/git/aisd-projects/arcanoid/arcanoid_codeblocks/arcanoid.h
+	<SFML/Graphics.hpp>
+	<vector>
+	<iostream>
+	<string>
+	"constants.h"
+	"gameEvent.h"
+	"ball.h"
+	"paddle.h"
+	"brick.h"
+	"HitBox.h"
+
+1657513643 /home/helf4ch/git/aisd-projects/arcanoid/arcanoid_codeblocks/constants.h
+	<SFML/Graphics.hpp>
+
+1657503065 /home/helf4ch/git/aisd-projects/arcanoid/arcanoid_codeblocks/gameEvent.h
+	<SFML/Graphics.hpp>
+
+1657517231 /home/helf4ch/git/aisd-projects/arcanoid/arcanoid_codeblocks/ball.h
+	<SFML/Graphics.hpp>
+	"constants.h"
+	"gameEvent.h"
+	"object.h"
+	"forms.h"
+	"properties.h"
+	"paddle.h"
+	"brick.h"
+	"HitBox.h"
+
+1657273150 /home/helf4ch/git/aisd-projects/arcanoid/arcanoid_codeblocks/object.h
+	<SFML/Graphics.hpp>
+
+1657513215 /home/helf4ch/git/aisd-projects/arcanoid/arcanoid_codeblocks/forms.h
+	<SFML/Graphics.hpp>
+
+1657502161 /home/helf4ch/git/aisd-projects/arcanoid/arcanoid_codeblocks/properties.h
+	<SFML/Graphics.hpp>
+	<vector>
+	"object.h"
+	"gameEvent.h"
+
+1657453533 /home/helf4ch/git/aisd-projects/arcanoid/arcanoid_codeblocks/paddle.h
+	<SFML/Graphics.hpp>
+	"constants.h"
+	"object.h"
+	"forms.h"
+	"properties.h"
+
+1657359431 /home/helf4ch/git/aisd-projects/arcanoid/arcanoid_codeblocks/brick.h
+	<SFML/Graphics.hpp>
+	"constants.h"
+	"object.h"
+	"forms.h"
+	"properties.h"
+
+1657516959 /home/helf4ch/git/aisd-projects/arcanoid/arcanoid_codeblocks/HitBox.h
+	<SFML/Graphics.hpp>
+	"constants.h"
+	"object.h"
+	"forms.h"
+	"properties.h"
+
