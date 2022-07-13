@@ -38,14 +38,18 @@
 		<Linker>
 			<Add directory="SFML-2.5.1/lib" />
 		</Linker>
-		<Unit filename="HitBox.h" />
 		<Unit filename="arcanoid.h" />
 		<Unit filename="ball.h" />
 		<Unit filename="brick.h" />
 		<Unit filename="constants.h" />
-		<Unit filename="font.ttf" />
 		<Unit filename="forms.h" />
 		<Unit filename="gameEvent.h" />
+		<Unit filename="hitBox.h" />
+		<Unit filename="ka1.ttf" />
+		<Unit filename="level.h" />
+		<Unit filename="level1.txt" />
+		<Unit filename="level2.txt" />
+		<Unit filename="level3.txt" />
 		<Unit filename="main.cpp" />
 		<Unit filename="object.h" />
 		<Unit filename="paddle.h" />
