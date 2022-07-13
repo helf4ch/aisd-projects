@@ -10,47 +10,90 @@
 #include "ball.h"
 #include "paddle.h"
 #include "brick.h"
-#include "HitBox.h"
+#include "hitBox.h"
+#include "level.h"
 
 namespace Arcanoid {
     class Game {
         private:
             bool running = false;
 
+            bool endGame;
+
             bool loseCondition;
             bool winCondition;
+
+            bool showTop;
+
+            bool loadingLevel;
+            int loadingTimer;
 
             int score;
 
             sf::RenderWindow window{{ WINDOW_WIDTH, WINDOW_HEIGHT }, "ARCANOID"};
             sf::RectangleShape frame;
             sf::Font font;
-            sf::Text scoreText;
+            sf::Clock clock;
 
             std::vector<GameEvent> gameEvents;
 
+            std::vector<int> leaderBoard;
+
+            std::vector<Level> levels;
+            int levelIndex;
+
             std::vector<Brick> bricks;
-            Ball ball{FIELD_WIDTH / 2 + FIELD_OFFSET_X, FIELD_HEIGHT / 2 + FIELD_OFFSET_Y};
-            Paddle paddle{FIELD_WIDTH / 2 + FIELD_OFFSET_X, FIELD_HEIGHT + FIELD_OFFSET_Y - 50};
-            HitBox bottomDeathBox{FIELD_WIDTH / 2 + FIELD_OFFSET_X, FIELD_HEIGHT + FIELD_OFFSET_Y - 25, 
-                                    FIELD_WIDTH, 50};
+            std::vector<Ball> balls;
+            std::vector<Paddle> paddles;
+            std::vector<HitBox> deathBoxes;
+
+            void nextLevel() {
+                if (levels.size() == levelIndex + 1) {
+                    GameEvent event;
+                    event.type = GameEvent::Win;
+                    gameEvents.push_back(event);
+                } else {
+                    ++levelIndex;
+                    loadLevel();
+                }
+            }
+
+            void loadLevel() {
+                bricks = levels[levelIndex].getBricks();
+                balls = levels[levelIndex].getBalls();
+                paddles = levels[levelIndex].getPaddles();
+                deathBoxes = levels[levelIndex].getDeathBoxes();
+
+                loadingLevel = true;
+                loadingTimer = 3;
+            }
 
             void newGame() {
+                levelIndex = 0;
+
+                endGame = false;
+
                 loseCondition = false;
                 winCondition = false;
 
+                showTop = false;
+
+                loadingLevel = false;
+                loadingTimer = 0;
+
                 score = 0;
 
-                ball = Ball{FIELD_WIDTH / 2 + FIELD_OFFSET_X, FIELD_HEIGHT / 2 + FIELD_OFFSET_Y};
-                paddle = Paddle{FIELD_WIDTH / 2 + FIELD_OFFSET_X, FIELD_HEIGHT + FIELD_OFFSET_Y - 50};
-                bottomDeathBox = HitBox{FIELD_WIDTH / 2 + FIELD_OFFSET_X, FIELD_HEIGHT + FIELD_OFFSET_Y - 11, 
-                                        FIELD_WIDTH, 22};
+                gameEvents.clear();
 
-                bricks.clear();
-                for(int iX = 0; iX < COUNT_BRICKS_X; ++iX)
-                    for(int iY = 0; iY < COUNT_BRICKS_Y; ++iY)
-                        bricks.emplace_back((iX + 1) * (BRICK_WIDTH + 3) + 22 + FIELD_OFFSET_X,
-                                            (iY + 2) * (BRICK_HEIGHT + 3) + FIELD_OFFSET_Y);
+                loadLevel();
+            }
+
+            void addToLeaderBoard(const int score) {
+                leaderBoard.push_back(score);
+                std::sort(leaderBoard.begin(), leaderBoard.end(), std::greater<int>());
+                if (leaderBoard.size() > 10) {
+                    leaderBoard.erase(leaderBoard.begin() + 10, leaderBoard.end());
+                }
             }
 
             void handleGameEvents() {
@@ -61,11 +104,15 @@ namespace Arcanoid {
                             break;
                         
                         case GameEvent::Win:
+                            endGame = true;
                             winCondition = true;
+                            addToLeaderBoard(score);
                             break;
                         
                         case GameEvent::Lose:
+                            endGame = true;
                             loseCondition = true;
+                            addToLeaderBoard(score);
                             break;
 
                         default:
@@ -87,97 +134,101 @@ namespace Arcanoid {
 
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape)) running = false;
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Enter)) newGame();
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Backspace) && endGame && showTop) 
+                    showTop = false;
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space) && endGame) showTop = true;
             }
 
             void updatePhase() {
-                ball.update();
-                paddle.update();
-
-                ball.testCollision(gameEvents, bottomDeathBox);
-                ball.testCollision(gameEvents, paddle);
-
-                for (auto& brick : bricks) {
-                    ball.testCollision(gameEvents, brick);
+                for (auto &ball : balls) {
+                    ball.update();
+                    for (auto &deathBox : deathBoxes) {
+                        ball.testCollision(gameEvents, deathBox);
+                    }
+                    for (auto &paddle : paddles) {
+                        paddle.update();
+                        ball.testCollision(gameEvents, paddle);
+                    }
+                    for (auto &brick : bricks) {
+                        ball.testCollision(gameEvents, brick);
+                    }
                 }
 
                 bricks.erase(remove_if(begin(bricks), end(bricks),
-                                        [](const Brick& brick)
-                                        {
-                                            return brick.isDestroyed();
-                                        }),
+                            [](const Brick& brick) {
+                                    return brick.isDestroyed();
+                                }),
                             end(bricks));
                 
                 if (bricks.size() == 0) {
-                    GameEvent event;
-                    event.type = GameEvent::Win;
-                    gameEvents.push_back(event);
+                    nextLevel();
                 }
             }
 
             void drawPhase() {
-                scoreText.setString("SCORE " + std::to_string(score));
-                std::string scoreString = scoreText.getString();
-                scoreText.setOrigin(((scoreText.getCharacterSize() / 2.f) * scoreString.size()) / 2.f,
-                                    scoreText.getCharacterSize() / 1.5f);
-                
-                showSubInfoText("PRESS ENTER TO RESTART THE GAME");
+                showText("SCORE " + std::to_string(score), WINDOW_WIDTH / 2.f, FIELD_OFFSET_Y / 2.f - 3, 60);
+                showText("PRESS ENTER TO RESTART THE GAME", WINDOW_WIDTH / 2.f, 
+                         FIELD_OFFSET_Y / 2.f + 101 + FIELD_HEIGHT + FIELD_OFFSET_Y, 16);
 
-                window.draw(scoreText);
                 window.draw(frame);
-                window.draw(ball.getShape());
-                window.draw(paddle.getShape());
-                window.draw(bottomDeathBox.getShape());
-                for (auto& brick : bricks) {
+
+                for (auto &ball : balls) {
+                    window.draw(ball.getShape());
+                }
+
+                for (auto &deathBox : deathBoxes) {
+                    window.draw(deathBox.getShape());
+                }
+
+                for (auto &paddle : paddles) {
+                    window.draw(paddle.getShape());
+                }
+
+                for (auto &brick : bricks) {
                     window.draw(brick.getShape());
                 }
             }
 
-            void showInfoText(const std::string &string) {
+            void showText(const std::string &string, const float x, const float y, const int size) {
                 sf::Text text;
 
                 text.setFont(font);
-                text.setPosition(WINDOW_WIDTH / 2.f, FIELD_OFFSET_Y * 1.3f + 3 + FIELD_HEIGHT);
-                text.setCharacterSize(52);
+                text.setPosition(x, y);
+                text.setCharacterSize(size);
 
                 text.setString(string);
                 std::string textString = text.getString();
-                text.setOrigin(((text.getCharacterSize() / 2.f) * textString.size()) / 2.f,
+                text.setOrigin(((text.getCharacterSize() / 1.3f) * textString.size()) / 2.f,
                                 text.getCharacterSize() / 1.5f);
 
                 window.draw(text);
             }
 
-            void showSubInfoText(const std::string &string) {
-                sf::Text text;
+            void showLeaderBoard() {
+                showText("SCORE " + std::to_string(score), WINDOW_WIDTH / 2.f, FIELD_OFFSET_Y / 2.f - 3, 60);
+                showText("PRESS BACKSPACE TO EXIT THIS SCREEN", WINDOW_WIDTH / 2.f, 
+                         FIELD_OFFSET_Y / 2.f + 57 + FIELD_HEIGHT + FIELD_OFFSET_Y, 26);
+                showText("PRESS ENTER TO RESTART THE GAME", WINDOW_WIDTH / 2.f, 
+                         FIELD_OFFSET_Y / 2.f + 101 + FIELD_HEIGHT + FIELD_OFFSET_Y, 16);
 
-                text.setFont(font);
-                text.setPosition(WINDOW_WIDTH / 2.f, FIELD_OFFSET_Y * 1.6f + 3 + FIELD_HEIGHT);
-                text.setCharacterSize(20);
+                window.draw(frame);
 
-                text.setString(string);
-                std::string textString = text.getString();
-                text.setOrigin(((text.getCharacterSize() / 2.f) * textString.size()) / 2.f,
-                                text.getCharacterSize() / 1.5f);
-
-                window.draw(text);
-            }
-
-            void handleWinCondition() {
-                showInfoText("YOU WIN!");
-
-                inputPhase();
-                drawPhase();
-            }
-
-            void handleLoseCondition() {
-                showInfoText("YOU LOSE!");
-                
-                inputPhase();
-                drawPhase();
+                for (int i = 0; i < 10; ++i) {
+                    if (i >= leaderBoard.size()) {
+                        continue;
+                    } else {
+                        showText(std::to_string(i + 1) + ". " + std::to_string(leaderBoard[i]), 
+                                 WINDOW_WIDTH / 2.f, 52 * (i + 1) + 12 + FIELD_OFFSET_Y, 30);
+                    }
+                }
             }
 
         public:
-            explicit Game() {
+            explicit Game(std::vector<Level> new_levels) {
+                if (!new_levels.size()) {
+                    throw "Error: no levels";
+                }
+
                 window.setFramerateLimit(60);
 
                 frame.setPosition(FIELD_OFFSET_X, FIELD_OFFSET_Y);
@@ -186,14 +237,12 @@ namespace Arcanoid {
                 frame.setOutlineColor(sf::Color::White);
                 frame.setFillColor(sf::Color::Transparent);
 
-                if (!font.loadFromFile("font.ttf")) {
+                if (!font.loadFromFile("ka1.ttf")) {
                     std::cout << "Error loading font\n";
                     system("pause");
                 }
 
-                scoreText.setFont(font);
-                scoreText.setPosition(WINDOW_WIDTH / 2.f, FIELD_OFFSET_Y / 2.f - 3);
-                scoreText.setCharacterSize(52);
+                levels = new_levels;
 
                 newGame();
             }
@@ -204,10 +253,33 @@ namespace Arcanoid {
                 while (running) {
                     window.clear();
 
-                    if (winCondition) {
-                        handleWinCondition();
-                    } else if (loseCondition) {
-                        handleLoseCondition();
+                    if (loadingLevel) {
+                        drawPhase();
+                        showText(std::to_string(loadingTimer), WINDOW_WIDTH / 2.f, 
+                                 FIELD_OFFSET_Y / 2.f - 3 + FIELD_HEIGHT + FIELD_OFFSET_Y, 46);
+                        if (clock.getElapsedTime().asSeconds() > 1.f) {
+                            --loadingTimer;
+                            clock.restart();
+                        }
+                        if (!loadingTimer) {
+                            loadingLevel = false;
+                        }
+                        inputPhase();
+                    } else if (endGame) {
+                        if (winCondition) showText("YOU WIN!", WINDOW_WIDTH / 2.f, 
+                                                   FIELD_OFFSET_Y / 2.f - 3 + FIELD_HEIGHT + 
+                                                   FIELD_OFFSET_Y / 2.f, 38);
+                        else if (loseCondition) showText("YOU LOSE!", WINDOW_WIDTH / 2.f, 
+                                                         FIELD_OFFSET_Y / 2.f - 3 + FIELD_HEIGHT + 
+                                                         FIELD_OFFSET_Y, 46);
+                        if (showTop) {
+                            showLeaderBoard();
+                        } else {
+                            showText("PRESS SPACE TO LOOK AT THE LEADER BOARD", WINDOW_WIDTH / 2.f, 
+                                    FIELD_OFFSET_Y / 2.f + 57 + FIELD_HEIGHT + FIELD_OFFSET_Y, 26);
+                            drawPhase();
+                        }
+                        inputPhase();
                     } else {
                         handleGameEvents();
                         inputPhase();

@@ -13,8 +13,8 @@ namespace Arcanoid {
             sf::Vector2f velocity;
 
         public:
-            explicit Paddle(const int start_x, const int start_y):
-                     RectangleForm(start_x, start_y, PADDLE_WIDTH, PADDLE_HEIGHT, sf::Color::Red) {}
+            explicit Paddle(const int start_x, const int start_y, const sf::Color color = sf::Color::Red):
+                     RectangleForm(start_x, start_y, PADDLE_WIDTH, PADDLE_HEIGHT, color) {}
 
             virtual void update() {
                 getShape().move(velocity);

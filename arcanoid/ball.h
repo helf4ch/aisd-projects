@@ -9,7 +9,7 @@
 #include "properties.h"
 #include "paddle.h"
 #include "brick.h"
-#include "HitBox.h"
+#include "hitBox.h"
 
 namespace Arcanoid {
     class Ball : public Object, public CircleForm, public Updatable, 
@@ -19,8 +19,8 @@ namespace Arcanoid {
             sf::Vector2f velocity{-BALL_VELOCITY, -BALL_VELOCITY};
 
         public:
-            explicit Ball(const int start_x, const int start_y):
-                     CircleForm(start_x, start_y, BALL_RADIUS, sf::Color::Red) {}
+            explicit Ball(const int start_x, const int start_y, const sf::Color color = sf::Color::Red):
+                     CircleForm(start_x, start_y, BALL_RADIUS, color) {}
 
             virtual void update() {
                 getShape().move(velocity);
@@ -35,11 +35,21 @@ namespace Arcanoid {
             virtual void testCollision(std::vector<GameEvent> &gameEvents, Paddle& collideWith) {
                 if (!Form::isIntersecting(collideWith, *this)) return;
 
-                velocity.y = -BALL_VELOCITY;
-                if (x() < collideWith.x())
-                    velocity.x = -BALL_VELOCITY;
+                float overlapLeft = right() - collideWith.left();
+                float overlapRight = collideWith.right() - left();
+                float overlapTop = bottom() - collideWith.top();
+                float overlapBottom = collideWith.bottom() - top();
+
+                bool ballFromLeft(abs(overlapLeft) < abs(overlapRight));
+                bool ballFromTop(abs(overlapTop) < abs(overlapBottom));
+
+                float minOverlapX = ballFromLeft ? overlapLeft : overlapRight;
+                float minOverlapY = ballFromTop ? overlapTop : overlapBottom;
+
+                if (abs(minOverlapX) < abs(minOverlapY))
+                    velocity.x = ballFromLeft ? -BALL_VELOCITY : BALL_VELOCITY;
                 else
-                    velocity.x = BALL_VELOCITY;
+                    velocity.y = ballFromTop ? -BALL_VELOCITY : BALL_VELOCITY;
             }
 
             virtual void testCollision(std::vector<GameEvent> &gameEvents, Brick& collideWith) {
