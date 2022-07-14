@@ -1,8 +1,11 @@
 # depslib dependency file v1.0
-1657624310 source:e:\desktop\all\com-sci\git\aisd-projects\arcanoid\arcanoid_codeblocks\main.cpp
+1657722970 source:e:\desktop\all\com-sci\git\aisd-projects\arcanoid\arcanoid_codeblocks\main.cpp
+	<fstream>
+	<vector>
+	<string>
 	"arcanoid.h"
 
-1657624310 e:\desktop\all\com-sci\git\aisd-projects\arcanoid\arcanoid_codeblocks\arcanoid.h
+1657722970 e:\desktop\all\com-sci\git\aisd-projects\arcanoid\arcanoid_codeblocks\arcanoid.h
 	<SFML/Graphics.hpp>
 	<vector>
 	<iostream>
@@ -12,7 +15,8 @@
 	"ball.h"
 	"paddle.h"
 	"brick.h"
-	"HitBox.h"
+	"hitBox.h"
+	"level.h"
 
 1525783220 e:\desktop\all\com-sci\git\aisd-projects\arcanoid\arcanoid_codeblocks\sfml-2.5.1\include\sfml\graphics.hpp
 	<SFML/Window.hpp>
@@ -423,14 +427,15 @@
 	<SFML/Graphics/Drawable.hpp>
 	<SFML/Window/GlResource.hpp>
 
-1657624310 e:\desktop\all\com-sci\git\aisd-projects\arcanoid\arcanoid_codeblocks\constants.h
+1657811786 e:\desktop\all\com-sci\git\aisd-projects\arcanoid\arcanoid_codeblocks\constants.h
 	<SFML/Graphics.hpp>
 
 1657624310 e:\desktop\all\com-sci\git\aisd-projects\arcanoid\arcanoid_codeblocks\gameevent.h
 	<SFML/Graphics.hpp>
 
-1657624310 e:\desktop\all\com-sci\git\aisd-projects\arcanoid\arcanoid_codeblocks\ball.h
+1657812232 e:\desktop\all\com-sci\git\aisd-projects\arcanoid\arcanoid_codeblocks\ball.h
 	<SFML/Graphics.hpp>
+	<math.h>
 	"constants.h"
 	"gameEvent.h"
 	"object.h"
@@ -438,7 +443,7 @@
 	"properties.h"
 	"paddle.h"
 	"brick.h"
-	"HitBox.h"
+	"hitBox.h"
 
 1657624310 e:\desktop\all\com-sci\git\aisd-projects\arcanoid\arcanoid_codeblocks\object.h
 	<SFML/Graphics.hpp>
@@ -452,24 +457,37 @@
 	"object.h"
 	"gameEvent.h"
 
-1657624310 e:\desktop\all\com-sci\git\aisd-projects\arcanoid\arcanoid_codeblocks\paddle.h
+1657722970 e:\desktop\all\com-sci\git\aisd-projects\arcanoid\arcanoid_codeblocks\paddle.h
 	<SFML/Graphics.hpp>
 	"constants.h"
 	"object.h"
 	"forms.h"
 	"properties.h"
 
-1657624310 e:\desktop\all\com-sci\git\aisd-projects\arcanoid\arcanoid_codeblocks\brick.h
+1657722970 e:\desktop\all\com-sci\git\aisd-projects\arcanoid\arcanoid_codeblocks\brick.h
 	<SFML/Graphics.hpp>
 	"constants.h"
 	"object.h"
 	"forms.h"
 	"properties.h"
 
-1657624310 e:\desktop\all\com-sci\git\aisd-projects\arcanoid\arcanoid_codeblocks\hitbox.h
+1657722970 e:\desktop\all\com-sci\git\aisd-projects\arcanoid\arcanoid_codeblocks\hitbox.h
 	<SFML/Graphics.hpp>
 	"constants.h"
 	"object.h"
 	"forms.h"
 	"properties.h"
+
+1657722970 e:\desktop\all\com-sci\git\aisd-projects\arcanoid\arcanoid_codeblocks\level.h
+	<SFML/Graphics.hpp>
+	<vector>
+	<string>
+	<fstream>
+	<sstream>
+	<iostream>
+	"constants.h"
+	"ball.h"
+	"paddle.h"
+	"brick.h"
+	"hitBox.h"
 
