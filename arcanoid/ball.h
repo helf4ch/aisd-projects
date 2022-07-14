@@ -26,11 +26,22 @@ namespace Arcanoid {
             virtual void update() {
                 getShape().move(velocity);
 
-                if (left() < 0) velocity.x = -velocity.x;
-                else if (right() > FIELD_WIDTH) velocity.x = -velocity.x;
+                if (left() < 0) {
+                    getShape().setPosition(FIELD_OFFSET_X + BALL_RADIUS, y() + FIELD_OFFSET_Y);
+                    velocity.x = -velocity.x;
+                } else if (right() > FIELD_WIDTH) {
+                    getShape().setPosition(FIELD_OFFSET_X + FIELD_WIDTH - BALL_RADIUS, y() + FIELD_OFFSET_Y);
+                    velocity.x = -velocity.x;
+                }
 
-                if (top() < 0) velocity.y = -velocity.y;
-                else if (bottom() > FIELD_HEIGHT) velocity.y = -velocity.y;
+                if (top() < 0) {
+                    getShape().setPosition(x() + FIELD_OFFSET_X, FIELD_OFFSET_Y + BALL_RADIUS);
+                    velocity.y = -velocity.y;
+                }
+                else if (bottom() > FIELD_HEIGHT) {
+                    getShape().setPosition(x() + FIELD_OFFSET_X, FIELD_OFFSET_Y + FIELD_HEIGHT - BALL_RADIUS);
+                    velocity.y = -velocity.y;
+                }
             }
 
             virtual void testCollision(std::vector<GameEvent> &gameEvents, Paddle& collideWith) {
