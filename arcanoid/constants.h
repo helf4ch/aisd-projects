@@ -19,12 +19,14 @@ namespace Arcanoid {
     const float BALL_RADIUS = 10.f;
     const float BALL_VELOCITY = 5.f;
 
-    const float PADDLE_WIDTH = 60.f;
+    const float PADDLE_WIDTH = 120.f;
     const float PADDLE_HEIGHT = 20.f;
-    const float PADDLE_VELOCITY = 6.f;
+    const float PADDLE_VELOCITY = 7.f;
 
     const float BRICK_WIDTH = 60.f;
     const float BRICK_HEIGHT = 20.f;
     const int COUNT_BRICKS_X = 11;
     const int COUNT_BRICKS_Y = 23;
+
+    const float PI = 3.14f;
 }

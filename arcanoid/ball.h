@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include <math.h>
 
 #include "constants.h"
 #include "gameEvent.h"
@@ -16,7 +17,7 @@ namespace Arcanoid {
                  public Collidable<Paddle>, public Collidable<Brick>, 
                  public Collidable<HitBox> {
         private:
-            sf::Vector2f velocity{-BALL_VELOCITY, -BALL_VELOCITY};
+            sf::Vector2f velocity{0.f, -BALL_VELOCITY};
 
         public:
             explicit Ball(const int start_x, const int start_y, const sf::Color color = sf::Color::Red):
@@ -25,11 +26,11 @@ namespace Arcanoid {
             virtual void update() {
                 getShape().move(velocity);
 
-                if (left() < 0) velocity.x = BALL_VELOCITY;
-                else if (right() > FIELD_WIDTH) velocity.x = -BALL_VELOCITY;
+                if (left() < 0) velocity.x = -velocity.x;
+                else if (right() > FIELD_WIDTH) velocity.x = -velocity.x;
 
-                if (top() < 0) velocity.y = BALL_VELOCITY;
-                else if (bottom() > FIELD_HEIGHT) velocity.y = -BALL_VELOCITY;
+                if (top() < 0) velocity.y = -velocity.y;
+                else if (bottom() > FIELD_HEIGHT) velocity.y = -velocity.y;
             }
 
             virtual void testCollision(std::vector<GameEvent> &gameEvents, Paddle& collideWith) {
@@ -46,10 +47,37 @@ namespace Arcanoid {
                 float minOverlapX = ballFromLeft ? overlapLeft : overlapRight;
                 float minOverlapY = ballFromTop ? overlapTop : overlapBottom;
 
-                if (abs(minOverlapX) < abs(minOverlapY))
-                    velocity.x = ballFromLeft ? -BALL_VELOCITY : BALL_VELOCITY;
-                else
-                    velocity.y = ballFromTop ? -BALL_VELOCITY : BALL_VELOCITY;
+                if (abs(minOverlapX) < abs(minOverlapY)) {
+                    float angle;
+                    if (ballFromTop) {
+                        angle = (y() - collideWith.top()) / (PADDLE_HEIGHT / 2);
+                        velocity.y = sin((angle * 70 + 10) * PI / 180) * sqrt(2 * BALL_VELOCITY * BALL_VELOCITY);
+                    } else {
+                        angle = (collideWith.bottom() - y()) / (PADDLE_HEIGHT / 2);
+                        velocity.y = -sin((angle * 70 + 10) * PI / 180) * sqrt(2 * BALL_VELOCITY * BALL_VELOCITY);
+                    }
+
+                    if (ballFromLeft) {
+                        velocity.x = -cos((angle * 70 + 10) * PI / 180) * sqrt(2 * BALL_VELOCITY * BALL_VELOCITY);
+                    } else {
+                        velocity.x = cos((angle * 70 + 10) * PI / 180) * sqrt(2 * BALL_VELOCITY * BALL_VELOCITY);
+                    }
+                } else {
+                    float angle;
+                    if (ballFromLeft) {
+                        angle = (x() - collideWith.left()) / (PADDLE_WIDTH / 2);
+                        velocity.x = -cos((angle * 70 + 10) * PI / 180) * sqrt(2 * BALL_VELOCITY * BALL_VELOCITY);
+                    } else {
+                        angle = (collideWith.right() - x()) / (PADDLE_WIDTH / 2);
+                        velocity.x = cos((angle * 70 + 10) * PI / 180) * sqrt(2 * BALL_VELOCITY * BALL_VELOCITY);
+                    }
+
+                    if (ballFromTop) {
+                        velocity.y = -sin((angle * 70 + 10) * PI / 180) * sqrt(2 * BALL_VELOCITY * BALL_VELOCITY);
+                    } else {
+                        velocity.y = sin((angle * 70 + 10) * PI / 180) * sqrt(2 * BALL_VELOCITY * BALL_VELOCITY);
+                    }
+                }
             }
 
             virtual void testCollision(std::vector<GameEvent> &gameEvents, Brick& collideWith) {
@@ -74,10 +102,11 @@ namespace Arcanoid {
                 float minOverlapX = ballFromLeft ? overlapLeft : overlapRight;
                 float minOverlapY = ballFromTop ? overlapTop : overlapBottom;
 
-                if (abs(minOverlapX) < abs(minOverlapY))
-                    velocity.x = ballFromLeft ? -BALL_VELOCITY : BALL_VELOCITY;
-                else
-                    velocity.y = ballFromTop ? -BALL_VELOCITY : BALL_VELOCITY;
+                if (abs(minOverlapX) < abs(minOverlapY)) {
+                    velocity.x = -velocity.x;
+                } else {
+                    velocity.y = -velocity.y;
+                }
             }
 
             virtual void testCollision(std::vector<GameEvent> &gameEvents, HitBox& collideWith) {
