@@ -7,10 +7,13 @@ namespace MatrixAlgebra {
     class AVector {
     private:
         std::vector<T> avector;
+        bool transposed;
         int dim;
 
     public:
         explicit AVector(std::vector<T> new_avector, int new_dim) {
+            transposed = false;
+
             if (new_avector.size() != new_dim) {
                 throw "Vector is must be a size of dimension.";
             }
@@ -28,6 +31,10 @@ namespace MatrixAlgebra {
             avector = std::vector<T>();
         }
 
+        void transpose() {
+            transposed = !transposed;
+        }
+
         int GetDim() const {
             return dim;
         }
@@ -35,10 +42,18 @@ namespace MatrixAlgebra {
         std::vector<T> GetAVector() const {
             return avector;
         }
+
+        bool isTransposed() const {
+            return transposed;
+        }
     };
 
     template <typename T>
     AVector<T> operator+(const AVector<T> &lhs, const AVector<T> &rhs) {
+        if (lhs.isTransposed() != rhs.isTransposed()) {
+            throw "Vectors must be the same orientation.";
+        }
+
         if (lhs.GetDim() != rhs.GetDim()) {
             throw "Vectors must be the same dimension.";
         }
@@ -61,6 +76,10 @@ namespace MatrixAlgebra {
 
     template <typename T>
     AVector<T> operator-(const AVector<T> &lhs, const AVector<T> &rhs) {
+        if (lhs.isTransposed() != rhs.isTransposed()) {
+            throw "Vectors must be the same orientation.";
+        }
+
         if (lhs.GetDim() != rhs.GetDim()) {
             throw "Vectors must be the same dimension.";
         }
@@ -79,6 +98,27 @@ namespace MatrixAlgebra {
     template <typename T>
     AVector<T> operator-=(const AVector<T> &lhs, const AVector<T> &rhs) {
         return lhs - rhs;
+    }
+
+    template <typename T>
+    T operator*(const AVector<T> &lhs, const AVector<T> &rhs) {
+        if (!lhs.isTransposed()) {
+            throw "Cant multiply column on column.";
+        }
+
+        if (lhs.GetDim() != rhs.GetDim()) {
+            throw "Vectors must be the same dimension.";
+        }
+
+        std::vector<T> lhs_vector = lhs.GetAVector();
+        std::vector<T> rhs_vector = rhs.GetAVector();
+
+        T result = 0;
+        for (int i = 0; i < lhs.GetDim(); ++i) {
+            result += lhs_vector[i] * rhs_vector[i];
+        }
+
+        return result;
     }
 
     template <typename T>
