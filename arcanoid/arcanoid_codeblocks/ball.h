@@ -62,31 +62,31 @@ namespace Arcanoid {
                     float angle;
                     if (ballFromTop) {
                         angle = (y() - collideWith.top()) / (PADDLE_HEIGHT / 2);
-                        velocity.y = sin((angle * 70 + 15) * PI / 180) * sqrt(2 * BALL_VELOCITY * BALL_VELOCITY);
+                        velocity.y = sin((angle * 70 + 20) * PI / 180) * sqrt(2 * BALL_VELOCITY * BALL_VELOCITY);
                     } else {
                         angle = (collideWith.bottom() - y()) / (PADDLE_HEIGHT / 2);
-                        velocity.y = -sin((angle * 70 + 15) * PI / 180) * sqrt(2 * BALL_VELOCITY * BALL_VELOCITY);
+                        velocity.y = -sin((angle * 70 + 20) * PI / 180) * sqrt(2 * BALL_VELOCITY * BALL_VELOCITY);
                     }
 
                     if (ballFromLeft) {
-                        velocity.x = -cos((angle * 70 + 15) * PI / 180) * sqrt(2 * BALL_VELOCITY * BALL_VELOCITY);
+                        velocity.x = -cos((angle * 70 + 20) * PI / 180) * sqrt(2 * BALL_VELOCITY * BALL_VELOCITY);
                     } else {
-                        velocity.x = cos((angle * 70 + 15) * PI / 180) * sqrt(2 * BALL_VELOCITY * BALL_VELOCITY);
+                        velocity.x = cos((angle * 70 + 20) * PI / 180) * sqrt(2 * BALL_VELOCITY * BALL_VELOCITY);
                     }
                 } else {
                     float angle;
                     if (ballFromLeft) {
                         angle = (x() - collideWith.left()) / (PADDLE_WIDTH / 2);
-                        velocity.x = -cos((angle * 70 + 15) * PI / 180) * sqrt(2 * BALL_VELOCITY * BALL_VELOCITY);
+                        velocity.x = -cos((angle * 70 + 20) * PI / 180) * sqrt(2 * BALL_VELOCITY * BALL_VELOCITY);
                     } else {
                         angle = (collideWith.right() - x()) / (PADDLE_WIDTH / 2);
-                        velocity.x = cos((angle * 70 + 15) * PI / 180) * sqrt(2 * BALL_VELOCITY * BALL_VELOCITY);
+                        velocity.x = cos((angle * 70 + 20) * PI / 180) * sqrt(2 * BALL_VELOCITY * BALL_VELOCITY);
                     }
 
                     if (ballFromTop) {
-                        velocity.y = -sin((angle * 70 + 15) * PI / 180) * sqrt(2 * BALL_VELOCITY * BALL_VELOCITY);
+                        velocity.y = -sin((angle * 70 + 20) * PI / 180) * sqrt(2 * BALL_VELOCITY * BALL_VELOCITY);
                     } else {
-                        velocity.y = sin((angle * 70 + 15) * PI / 180) * sqrt(2 * BALL_VELOCITY * BALL_VELOCITY);
+                        velocity.y = sin((angle * 70 + 20) * PI / 180) * sqrt(2 * BALL_VELOCITY * BALL_VELOCITY);
                     }
                 }
             }
